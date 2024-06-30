@@ -1,7 +1,7 @@
 'use client'
 
 import { ConnectButton, lightTheme, useActiveWalletConnectionStatus, useReadContract } from "thirdweb/react";
-import { client, contract } from "./client";
+import { client } from "./client";
 import { lineaSepolia } from "./chains";
 import "./page.css";
 import Header from "./page_header/header";
@@ -12,15 +12,8 @@ import { InfoPop } from "./page_pop/info_pop";
 import { BuyPop } from "./page_pop/buy_pop";
 import { ChangePop } from "./page_pop/change_pop";
 import { SellPop } from "./page_pop/sell_pop";
-import { refreshTravelCards, setTravelCards } from "./travel_card";
+import { refreshTravelCards } from "./travel_card";
 
-export enum ClassifyEnum {
-  ScenicSpot, // 景点
-  Prop, // 小物品，非遗
-  Snack, // 吃的
-  Literature, // 文学作品
-  Personage // 历史名人
-}
 
 export default function Home() {
   const walletConnectionStatus = (useActiveWalletConnectionStatus() == "disconnected") ? true : false;

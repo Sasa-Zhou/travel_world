@@ -5,7 +5,6 @@ import SearchSrc from "/public/image/search.png";
 import InfoSrc from "/public/image/info.png";
 
 import "./body.css";
-import { ClassifyEnum } from "../page";
 import { getTravelCardBySell, getTravelCardsByStore, travelCards } from "../travel_card";
 
 export function BodyLeft(props: {

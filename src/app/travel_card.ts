@@ -1,6 +1,5 @@
 import { contract } from './client';
 import { prepareContractCall, readContract, sendTransaction } from "thirdweb";
-import { ClassifyEnum } from "./page";
 import { WALLET_ADDRESS, ACCOUNT } from './page_header/header';
 
 export class TravelCard {
@@ -20,6 +19,7 @@ export class TravelCardToken {
 
 export let travelCards: readonly TravelCard[] | undefined;
 export let ownerTravelCards: readonly TravelCardToken[] | undefined;
+export let addressTravelCards: readonly TravelCardToken[] | undefined;
 
 
 export async function refreshTravelCards() {
@@ -56,8 +56,15 @@ export function getTravelCardBySell() {
 }
 
 // 获取用户拥有的卡片
-export async function refreshTravelCardByOwner() {
-    if (!!WALLET_ADDRESS) {
+export async function refreshTravelCardByOwner(_address?: any) {
+    if (!_address) {
+        const data = await readContract({ 
+            contract, 
+            method: "function searchTravelCardsByOwner(address _owner) view returns (((bytes cardlKey, string country, string province, string city, string classify, string name, string description) travelCard, uint256 cardTokenId)[])", 
+            params: [_address] 
+        });
+        setTravelCardByAddress(data);
+    } else if (!!WALLET_ADDRESS) {
         const data = await readContract({ 
             contract, 
             method: "function searchTravelCardsByOwner(address _owner) view returns (((bytes cardlKey, string country, string province, string city, string classify, string name, string description) travelCard, uint256 cardTokenId)[])", 
@@ -65,10 +72,12 @@ export async function refreshTravelCardByOwner() {
         });
         setTravelCardByOwner(data);
     }
-    
 }
 export function setTravelCardByOwner(_data: readonly TravelCardToken[] | undefined) {
     ownerTravelCards = _data;
+}
+export function setTravelCardByAddress(_data: readonly TravelCardToken[] | undefined) {
+    addressTravelCards = _data;
 }
 export function getTravelCardByOwner(_search?: string) {
     const resShowData: any[] = [];

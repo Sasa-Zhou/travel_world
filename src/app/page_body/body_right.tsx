@@ -2,16 +2,12 @@ import Image from "next/image";
 import SearchSrc from "/public/image/search.png";
 import InfoSrc from "/public/image/info.png";
 
-
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import "./body.css";
-import { ClassifyEnum } from "../page";
 import { ImageLoader } from "./body_left";
-import { useReadContract } from "thirdweb/react";
 import { WALLET_ADDRESS } from "../page_header/header";
-import { client, contract } from "../client";
-import { getTravelCardByOwner, ownerTravelCards, refreshTravelCardByOwner, setTravelCardByOwner } from "../travel_card";
+import { getTravelCardByOwner, ownerTravelCards, refreshTravelCardByOwner } from "../travel_card";
 
 export function BodyRight(props: {
     setItemInfo: Dispatch<SetStateAction<any>>,
