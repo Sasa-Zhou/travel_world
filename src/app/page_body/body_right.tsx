@@ -19,9 +19,12 @@ export function BodyRight(props: {
 
     const items_length = items.length;
 
-    useEffect(() => {
+    // useEffect(() => {
+    if(!!WALLET_ADDRESS) {
         refreshTravelCardByOwner();
-    }, [WALLET_ADDRESS]);
+    }
+        
+    // }, [WALLET_ADDRESS]);
     
 
     useEffect(() => {

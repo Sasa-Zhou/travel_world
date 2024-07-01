@@ -17,9 +17,9 @@ export class TravelCardToken {
     cardTokenId!: bigint;
 }
 
-export let travelCards: readonly TravelCard[] | undefined;
-export let ownerTravelCards: readonly TravelCardToken[] | undefined;
-export let addressTravelCards: readonly TravelCardToken[] | undefined;
+export let travelCards: readonly TravelCard[] | undefined = [];
+export let ownerTravelCards: readonly TravelCardToken[] | undefined = [];
+export let addressTravelCards: readonly TravelCardToken[] | undefined = [];
 
 
 export async function refreshTravelCards() {
@@ -57,7 +57,7 @@ export function getTravelCardBySell() {
 
 // 获取用户拥有的卡片
 export async function refreshTravelCardByOwner(_address?: any) {
-    if (!_address) {
+    if (!!_address) {
         const data = await readContract({ 
             contract, 
             method: "function searchTravelCardsByOwner(address _owner) view returns (((bytes cardlKey, string country, string province, string city, string classify, string name, string description) travelCard, uint256 cardTokenId)[])", 
@@ -112,6 +112,21 @@ export function getTravelCardByOwner(_search?: string) {
     }
 
     return resShowData;
+}
+
+export async function getLoginStatus() {
+    if (!!WALLET_ADDRESS) {
+        const data = await readContract({ 
+            contract, 
+            method: "function ownerLogin(address) view returns (uint256)", 
+            params: [WALLET_ADDRESS] 
+        });
+        const timestamp = Date.now();
+        console.log(data, timestamp);
+        return data > timestamp ? true : false;
+    } else {
+        return false;
+    }
 }
 
 // 点击签到

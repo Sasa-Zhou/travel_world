@@ -7,12 +7,10 @@ import FrogSilverSrc from "/public/image/frog_silver.png";
 import FrogBronzeSrc from "/public/image/frog_bronze.png";
 
 import "./header.css";
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
-import { useActiveAccount, useSendTransaction } from "thirdweb/react";
+import { useState, Dispatch, SetStateAction, useEffect } from "react";
+import { useActiveAccount } from "thirdweb/react";
 import { truncateAddress } from "../utils";
-import { prepareContractCall } from "thirdweb";
-import { contract } from "../client";
-import { TravelCard, getTravelCardByLogin } from "../travel_card";
+import { getLoginStatus, getTravelCardByLogin } from "../travel_card";
 
 // export const mail_click_status = false;
 export let WALLET_ADDRESS: any = '';
@@ -30,8 +28,6 @@ export default function Header(props: {
   const [achieve_silver, setAchieveSilver] = useState('0');
   const [achieve_bronze, setAchieveBronze] = useState('0');
 
-  const { mutate: sendTransaction } = useSendTransaction();
-
   // 获取钱包地址
   ACCOUNT = useActiveAccount();
   WALLET_ADDRESS = ACCOUNT?.address;
@@ -41,6 +37,22 @@ export default function Header(props: {
   // const gold = Number(achieve_gold) + 1;
   // setAchieveGold(gold.toString());
 
+  let loginStatus = getLoginStatus();
+  useEffect(() => {
+    
+    async function fetchData() {
+      if (await loginStatus) {
+        setSignClass("header_signed_in");
+        setSignTxt("已签到");
+      } else {
+        setSignClass("header_sign_in");
+        setSignTxt("签到");
+      }
+    }
+    fetchData();
+
+}, []);
+
   
 
   // onClick事件
@@ -49,8 +61,6 @@ export default function Header(props: {
       return;
     }
     getTravelCardByLogin();
-    setSignClass("header_signed_in");
-    setSignTxt("已签到");
     props.setSignClick(true);
   }
 
